@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
 
 import 'package:counter_application/providers.dart';
 
-class CounterPanel extends StatelessWidget {
+class CounterPanel extends ConsumerWidget {
   const CounterPanel({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final int count = context.watch<CounterProvider>().count;
-    final bool colorChanges =
-        context.watch<CounterSettingsProvider>().counterColorChanges;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final int count = ref.watch(counterProvider);
+    final bool colorChanges = ref.watch(settingsProvider).counterColorChanges;
     final int colorChangesValue =
-        context.watch<CounterSettingsProvider>().counterColorChangesValue;
+        ref.watch(settingsProvider).counterColorChangesValue;
 
     return Card(
       child: Padding(
@@ -35,11 +34,11 @@ class CounterPanel extends StatelessWidget {
   }
 }
 
-class CounterResetDialog extends StatelessWidget {
+class CounterResetDialog extends ConsumerWidget {
   const CounterResetDialog({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return AlertDialog(
       title: const Text('カウンターリセット'),
       content: const Text('カウンターをリセットしますか？'),
@@ -53,7 +52,7 @@ class CounterResetDialog extends StatelessWidget {
         TextButton(
             onPressed: () {
               Vibration.vibrate(duration: 10);
-              context.read<CounterProvider>().reset();
+              ref.read(counterProvider.notifier).reset();
               Navigator.of(context).pop();
             },
             child: const Text('はい')),

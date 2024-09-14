@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:counter_application/providers.dart';
-
 import 'package:counter_application/pages/counter_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => CounterProvider()),
-        ChangeNotifierProvider(create: (_) => CounterSettingsProvider()),
+    ProviderScope(
+      overrides: [
+        prefsProvider.overrideWithValue(
+          await SharedPreferences.getInstance(),
+        )
       ],
       child: const MainApp(),
     ),

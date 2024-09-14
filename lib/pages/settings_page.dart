@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:counter_application/providers.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final csprovider = context.watch<CounterSettingsProvider>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final settings = ref.watch(settingsProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -20,12 +19,12 @@ class SettingsPage extends StatelessWidget {
         children: [
           SwitchListTile(
             title: const Text('文字色変化'),
-            value: csprovider.counterColorChanges,
+            value: settings.counterColorChanges,
             onChanged: (bool value) {
-              csprovider.setCounterColorChanges(value);
+              ref.read(settingsProvider.notifier).setCounterColorChanges(value);
             },
           ),
-          if (csprovider.counterColorChanges)
+          if (settings.counterColorChanges)
             ListTile(
               title: const Text('文字色変化のしきい値'),
               onTap: () {
@@ -33,7 +32,7 @@ class SettingsPage extends StatelessWidget {
                   context: context,
                   builder: (BuildContext context) {
                     TextEditingController controller = TextEditingController(
-                      text: '${csprovider.counterColorChangesValue}',
+                      text: '${settings.counterColorChangesValue}',
                     );
 
                     // TODO: バリデーションつけて、コンポーネント切り出ししたい
@@ -59,9 +58,11 @@ class SettingsPage extends StatelessWidget {
                             child: const Text('キャンセル')),
                         TextButton(
                             onPressed: () {
-                              csprovider.setCounterColorChangesValue(
-                                int.parse(controller.text),
-                              );
+                              ref
+                                  .read(settingsProvider.notifier)
+                                  .setCounterColorChangesValue(
+                                    int.parse(controller.text),
+                                  );
                               Navigator.of(context).pop();
                             },
                             child: const Text('決定')),

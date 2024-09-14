@@ -1,82 +1,66 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:counter_application/models.dart';
-import 'package:counter_application/repositories.dart';
 
-// プロバイダーはMVVMのVMのような役割
-class CounterProvider with ChangeNotifier {
-  CounterProvider() {
-    _init();
-  }
-  final LastCountRepository _repository = LastCountRepository();
-  final CounterModel _model = CounterModel();
-
-  Future<void> _init() async {
-    await _repository.init();
-
-    int? lastCount = _repository.get();
-
-    if (lastCount != null) {
-      _model.set(lastCount);
-    }
-
-    notifyListeners();
+class CounterNotifier extends Notifier<int> {
+  @override
+  int build() {
+    return ref.read(prefsProvider).getInt('lastCount') ?? 0;
   }
 
-  // メソッド一覧
   void increment() {
-    _model.increment();
-    _repository.set(_model.count);
-    notifyListeners();
+    state++;
+    ref.read(prefsProvider).setInt('lastCount', state);
   }
 
   void reset() {
-    _model.set(0);
-    _repository.set(0);
-    notifyListeners();
+    state = 0;
+    ref.read(prefsProvider).setInt('lastCount', 0);
   }
-
-  // ゲッター
-  int get count => _model.count;
 }
 
-class CounterSettingsProvider with ChangeNotifier {
-  CounterSettingsProvider() {
-    _init();
-  }
-  final CounterSettingsRepository _repository = CounterSettingsRepository();
-  final CounterSettingsModel _model = CounterSettingsModel();
-
-  Future<void> _init() async {
-    await _repository.init();
-
-    bool? counterColorChanges = _repository.getCounterColorChanges();
-    int? counterColorChangesValue = _repository.getCounterColorChangesValue();
-
-    if (counterColorChanges != null) {
-      _model.setCounterColorChanges(counterColorChanges);
-    }
-    if (counterColorChangesValue != null) {
-      _model.setCounterColorChangesValue(counterColorChangesValue);
-    }
-
-    notifyListeners();
+class SettingsNotifier extends Notifier<SettingsModel> {
+  @override
+  SettingsModel build() {
+    return SettingsModel(
+      counterColorChanges:
+          ref.read(prefsProvider).getBool('counterColorChanges') ?? true,
+      counterColorChangesValue:
+          ref.read(prefsProvider).getInt('counterColorChangesValue') ?? 70,
+    );
   }
 
-  // メソッド一覧
   void setCounterColorChanges(bool value) {
-    _model.setCounterColorChanges(value);
-    _repository.setCounterColorChanges(value);
-    notifyListeners();
+    state = state.copyWith(
+      counterColorChanges: value,
+    );
+    ref.read(prefsProvider).setBool(
+          'counterColorChanges',
+          state.counterColorChanges,
+        );
   }
 
   void setCounterColorChangesValue(int value) {
-    _model.setCounterColorChangesValue(value);
-    _repository.setCounterColorChangesValue(value);
-    notifyListeners();
+    state = state.copyWith(
+      counterColorChangesValue: value,
+    );
+    ref.read(prefsProvider).setInt(
+          'counterColorChangesValue',
+          state.counterColorChangesValue,
+        );
   }
-
-  // ゲッター
-  bool get counterColorChanges => _model.counterColorChanges;
-  int get counterColorChangesValue => _model.counterColorChangesValue;
 }
+
+final counterProvider = NotifierProvider<CounterNotifier, int>(
+  () => CounterNotifier(),
+);
+
+final settingsProvider = NotifierProvider<SettingsNotifier, SettingsModel>(
+  () => SettingsNotifier(),
+);
+
+final prefsProvider = Provider<SharedPreferences>(
+  (_) => throw UnimplementedError(),
+);
