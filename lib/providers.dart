@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,6 +30,9 @@ class SettingsNotifier extends Notifier<SettingsModel> {
           ref.read(prefsProvider).getBool('counterColorChanges') ?? true,
       counterColorChangesValue:
           ref.read(prefsProvider).getInt('counterColorChangesValue') ?? 70,
+      themeColor: Color(
+        ref.read(prefsProvider).getInt('themeColor') ?? Colors.purple.value,
+      ),
     );
   }
 
@@ -49,6 +53,16 @@ class SettingsNotifier extends Notifier<SettingsModel> {
     ref.read(prefsProvider).setInt(
           'counterColorChangesValue',
           state.counterColorChangesValue,
+        );
+  }
+
+  void setThemeColor(Color color) {
+    state = state.copyWith(
+      themeColor: color,
+    );
+    ref.read(prefsProvider).setInt(
+          'themeColor',
+          state.themeColor.value,
         );
   }
 }
