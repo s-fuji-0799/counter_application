@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:counter_application/infrastructures/shared_preferences.dart';
+import 'package:counter_application/infrastructures/sqlite.dart';
 
-import 'package:counter_application/providers.dart';
-import 'package:counter_application/pages/counter_page.dart';
+import 'package:counter_application/notifiers/settings_notifier.dart';
+
+import 'package:counter_application/pages/main_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,8 +15,11 @@ void main() async {
     ProviderScope(
       overrides: [
         prefsProvider.overrideWithValue(
-          await SharedPreferences.getInstance(),
-        )
+          await getSharedPreferences(),
+        ),
+        dbProvider.overrideWithValue(
+          await openAppDatabase(),
+        ),
       ],
       child: const MainApp(),
     ),
@@ -40,7 +45,7 @@ class MainApp extends ConsumerWidget {
           brightness: Brightness.dark,
         ),
       ),
-      home: const CounterPage(),
+      home: const MainPage(),
     );
   }
 }

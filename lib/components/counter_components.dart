@@ -3,17 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:vibration/vibration.dart';
 
-import 'package:counter_application/providers.dart';
+import 'package:counter_application/notifiers/settings_notifier.dart';
+import 'package:counter_application/notifiers/count_notifier.dart';
+import 'package:counter_application/notifiers/count_list_notifier.dart';
 
 class CounterPanel extends ConsumerWidget {
   const CounterPanel({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final int count = ref.watch(counterProvider);
-    final bool colorChanges = ref.watch(settingsProvider).counterColorChanges;
-    final int colorChangesValue =
-        ref.watch(settingsProvider).counterColorChangesValue;
+    final count = ref.watch(countProvider);
+    final settings = ref.watch(settingsProvider);
 
     return Card(
       child: Padding(
@@ -24,7 +24,8 @@ class CounterPanel extends ConsumerWidget {
         child: Text(
           '$count',
           style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                color: (colorChanges) && (colorChangesValue <= count)
+                color: (settings.changeColor) &&
+                        (settings.colorChangeValue <= count)
                     ? Colors.red
                     : Theme.of(context).textTheme.displayLarge!.color,
               ),
@@ -39,6 +40,10 @@ class CounterResetDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final count = ref.watch(countProvider);
+    final countNotifier = ref.watch(countProvider.notifier);
+    final countListNotifier = ref.watch(countListProvider.notifier);
+
     return AlertDialog(
       title: const Text('カウンターリセット'),
       content: const Text('カウンターをリセットしますか？'),
@@ -50,10 +55,15 @@ class CounterResetDialog extends ConsumerWidget {
             },
             child: const Text('いいえ')),
         TextButton(
-            onPressed: () {
+            onPressed: () async {
               Vibration.vibrate(duration: 10);
-              ref.read(counterProvider.notifier).reset();
-              Navigator.of(context).pop();
+              countNotifier.reset();
+
+              await countListNotifier.addCount(count);
+
+              if (context.mounted) {
+                Navigator.of(context).pop();
+              }
             },
             child: const Text('はい')),
       ],
