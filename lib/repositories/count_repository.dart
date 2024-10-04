@@ -33,7 +33,7 @@ class CountRepository {
     await _db.delete(tableCount, where: '$columnId = ?', whereArgs: [id]);
   }
 
-  Future<List<Count>?> getAllCount() async {
+  Future<List<Count>> getAllCount() async {
     final rawCountList = await _db.query(
       tableCount,
       columns: [columnId, columnCountedAt, columnValue],
@@ -43,7 +43,6 @@ class CountRepository {
     if (rawCountList.isNotEmpty) {
       return rawCountList.map((e) => Count.fromMap(e)).toList();
     }
-
-    return null;
+    return [];
   }
 }

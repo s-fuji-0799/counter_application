@@ -31,17 +31,19 @@ class MainApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final settings = ref.watch(settingsProvider);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: ref.watch(settingsProvider).themeColor,
+          seedColor: settings.themeColor,
           brightness: Brightness.light,
         ),
       ),
       darkTheme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: ref.watch(settingsProvider).themeColor,
+          seedColor: settings.themeColor,
           brightness: Brightness.dark,
         ),
       ),

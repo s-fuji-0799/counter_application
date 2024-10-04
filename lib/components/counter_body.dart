@@ -13,7 +13,7 @@ class CounterBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final countNotifier = ref.watch(countProvider.notifier);
+    final countNotifier = ref.read(countProvider.notifier);
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,

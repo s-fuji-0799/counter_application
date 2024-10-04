@@ -35,12 +35,12 @@ class CountListTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final countListNotifier = ref.watch(countListProvider.notifier);
+    final countListNotifier = ref.read(countListProvider.notifier);
 
     return ListTile(
       title: Text(count.value.toString()),
       subtitle: Text(count.countedAt.toString()),
-      onTap: () => countListNotifier.deleteCount(count.id!),
+      onLongPress: () => countListNotifier.deleteCount(count.id!),
     );
   }
 }

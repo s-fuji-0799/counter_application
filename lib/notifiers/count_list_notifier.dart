@@ -12,8 +12,7 @@ class CountList extends AsyncNotifier<List<Count>> {
   CountRepository get _repository => ref.watch(countRepositoryProvider);
 
   Future<List<Count>> _fetchCountList() async {
-    final list = await _repository.getAllCount();
-    return list ?? [];
+    return await _repository.getAllCount();
   }
 
   @override

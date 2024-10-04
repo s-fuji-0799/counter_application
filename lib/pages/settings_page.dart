@@ -28,7 +28,7 @@ class SettingsPage extends ConsumerWidget {
               title: const Text('文字色変化'),
               value: settings.changeColor,
               onChanged: (bool value) {
-                settingsNotifier.setCounterColorChanges(value);
+                settingsNotifier.setChangeColor(value);
               },
             ),
             if (settings.changeColor)
@@ -60,13 +60,11 @@ class SettingsPage extends ConsumerWidget {
                         ),
                         actions: <Widget>[
                           TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
+                              onPressed: () => Navigator.of(context).pop(),
                               child: const Text('キャンセル')),
                           TextButton(
                               onPressed: () {
-                                settingsNotifier.setCounterColorChangesValue(
+                                settingsNotifier.setColorChangeValue(
                                   int.parse(controller.text),
                                 );
                                 Navigator.of(context).pop();
@@ -89,18 +87,38 @@ class SettingsPage extends ConsumerWidget {
                     return AlertDialog(
                       title: const Text('テーマカラー選択'),
                       content: SingleChildScrollView(
-                        child: BlockPicker(
-                          pickerColor: settings.themeColor,
-                          onColorChanged: (value) {
-                            settingsNotifier.setThemeColor(value);
-                          },
+                        child: SizedBox(
+                          height: 200,
+                          child: BlockPicker(
+                            availableColors: const [
+                              Colors.red,
+                              Colors.pink,
+                              Colors.purple,
+                              Colors.deepPurple,
+                              Colors.indigo,
+                              Colors.blue,
+                              Colors.lightBlue,
+                              Colors.cyan,
+                              Colors.teal,
+                              Colors.green,
+                              Colors.lightGreen,
+                              Colors.lime,
+                              Colors.yellow,
+                              Colors.amber,
+                              Colors.orange,
+                              Colors.deepOrange,
+                              Colors.brown,
+                            ],
+                            pickerColor: settings.themeColor,
+                            onColorChanged: (value) {
+                              settingsNotifier.setThemeColor(value);
+                            },
+                          ),
                         ),
                       ),
                       actions: <Widget>[
                         TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
+                          onPressed: () => Navigator.of(context).pop(),
                           child: const Text('決定'),
                         ),
                       ],

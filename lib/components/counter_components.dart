@@ -41,8 +41,8 @@ class CounterResetDialog extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final count = ref.watch(countProvider);
-    final countNotifier = ref.watch(countProvider.notifier);
-    final countListNotifier = ref.watch(countListProvider.notifier);
+    final countNotifier = ref.read(countProvider.notifier);
+    final countListNotifier = ref.read(countListProvider.notifier);
 
     return AlertDialog(
       title: const Text('カウンターリセット'),
@@ -55,15 +55,13 @@ class CounterResetDialog extends ConsumerWidget {
             },
             child: const Text('いいえ')),
         TextButton(
-            onPressed: () async {
+            onPressed: () {
               Vibration.vibrate(duration: 10);
+
+              countListNotifier.addCount(count);
               countNotifier.reset();
 
-              await countListNotifier.addCount(count);
-
-              if (context.mounted) {
-                Navigator.of(context).pop();
-              }
+              Navigator.of(context).pop();
             },
             child: const Text('はい')),
       ],
