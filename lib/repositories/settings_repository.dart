@@ -15,8 +15,8 @@ class SettingsRepository {
   const SettingsRepository(this._prefs);
   final SharedPreferences _prefs;
 
-  SettingsModel getSettings() {
-    return SettingsModel(
+  Settings getSettings() {
+    return Settings(
       changeColor: _prefs.getBool(changeColor) ?? true,
       colorChangeValue: _prefs.getInt(colorChangeValue) ?? 70,
       themeColor: Color(

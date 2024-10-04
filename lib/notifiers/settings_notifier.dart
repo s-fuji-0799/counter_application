@@ -4,15 +4,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:counter_application/models/settings_model.dart';
 import 'package:counter_application/repositories/settings_repository.dart';
 
-final settingsProvider = NotifierProvider<SettingsNotifier, SettingsModel>(
+final settingsProvider = NotifierProvider<SettingsNotifier, Settings>(
   () => SettingsNotifier(),
 );
 
-class SettingsNotifier extends Notifier<SettingsModel> {
+class SettingsNotifier extends Notifier<Settings> {
   SettingsRepository get _repository => ref.watch(settingsRepositoryProvider);
 
   @override
-  SettingsModel build() => _repository.getSettings();
+  Settings build() => _repository.getSettings();
 
   void setChangeColor(bool value) {
     state = state.copyWith(changeColor: value);

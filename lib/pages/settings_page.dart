@@ -46,17 +46,12 @@ class SettingsPage extends ConsumerWidget {
                       // TODO: バリデーションつけて、コンポーネント切り出ししたい
                       return AlertDialog(
                         title: const Text('しきい値'),
-                        content: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            TextField(
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly
-                              ],
-                              controller: controller,
-                            ),
+                        content: TextField(
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
                           ],
+                          controller: controller,
                         ),
                         actions: <Widget>[
                           TextButton(

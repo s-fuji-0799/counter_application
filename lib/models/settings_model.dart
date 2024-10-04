@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class SettingsModel {
-  const SettingsModel({
+class Settings {
+  const Settings({
     required this.changeColor,
     required this.colorChangeValue,
     required this.themeColor,
@@ -11,12 +11,12 @@ class SettingsModel {
   final int colorChangeValue;
   final Color themeColor;
 
-  SettingsModel copyWith({
+  Settings copyWith({
     bool? changeColor,
     int? colorChangeValue,
     Color? themeColor,
   }) {
-    return SettingsModel(
+    return Settings(
       changeColor: changeColor ?? this.changeColor,
       colorChangeValue: colorChangeValue ?? this.colorChangeValue,
       themeColor: themeColor ?? this.themeColor,
