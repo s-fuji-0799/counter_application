@@ -14,7 +14,7 @@ void main() async {
   runApp(
     ProviderScope(
       overrides: [
-        prefsProvider.overrideWithValue(
+        settingsPrefsProvider.overrideWithValue(
           await getSharedPreferences(),
         ),
         dbProvider.overrideWithValue(

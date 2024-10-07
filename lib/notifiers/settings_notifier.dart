@@ -14,18 +14,16 @@ class SettingsNotifier extends Notifier<Settings> {
   @override
   Settings build() => _repository.getSettings();
 
-  void setChangeColor(bool value) {
-    state = state.copyWith(changeColor: value);
-    _repository.setChangeColor(value);
+  Future<void> setChangeColor(bool value) async {
+    await _repository.setChangeColor(value);
+    ref.invalidateSelf();
   }
 
-  void setColorChangeValue(int value) {
-    state = state.copyWith(colorChangeValue: value);
-    _repository.setColorChangeValue(value);
+  Future<void> setColorChangeValue(int value) async {
+    await _repository.setColorChangeValue(value);
   }
 
-  void setThemeColor(Color color) {
-    state = state.copyWith(themeColor: color);
-    _repository.setThemeColor(color);
+  Future<void> setThemeColor(Color color) async {
+    await _repository.setThemeColor(color);
   }
 }

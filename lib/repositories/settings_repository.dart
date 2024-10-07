@@ -8,12 +8,12 @@ import 'package:counter_application/infrastructures/shared_preferences.dart';
 import 'package:counter_application/constants/settings_constants.dart';
 
 final settingsRepositoryProvider = Provider<SettingsRepository>(
-  (ref) => SettingsRepository(ref.watch(prefsProvider)),
+  (ref) => SettingsRepository(ref.watch(settingsPrefsProvider)),
 );
 
 class SettingsRepository {
   const SettingsRepository(this._prefs);
-  final SharedPreferences _prefs;
+  final SharedPreferencesWithCache _prefs;
 
   Settings getSettings() {
     return Settings(
@@ -25,12 +25,12 @@ class SettingsRepository {
     );
   }
 
-  Future<bool> setChangeColor(bool value) async =>
+  Future<void> setChangeColor(bool value) async =>
       await _prefs.setBool(changeColor, value);
 
-  Future<bool> setColorChangeValue(int value) async =>
+  Future<void> setColorChangeValue(int value) async =>
       await _prefs.setInt(colorChangeValue, value);
 
-  Future<bool> setThemeColor(Color color) async =>
+  Future<void> setThemeColor(Color color) async =>
       await _prefs.setInt(themeColor, color.value);
 }

@@ -21,18 +21,16 @@ class CountList extends AsyncNotifier<List<Count>> {
   }
 
   Future<void> addCount(int value) async {
-    state = await AsyncValue.guard(
-      () async {
-        await _repository.insertCount(
-          Count(
-            countedAt: DateTime.now(),
-            value: value,
-          ),
-        );
+    state = await AsyncValue.guard(() async {
+      await _repository.insertCount(
+        Count(
+          countedAt: DateTime.now(),
+          value: value,
+        ),
+      );
 
-        return _fetchCountList();
-      },
-    );
+      return _fetchCountList();
+    });
   }
 
   Future<void> deleteCount(int id) async {

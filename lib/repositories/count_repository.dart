@@ -25,14 +25,6 @@ class CountRepository {
   const CountRepository(this._db);
   final Database _db;
 
-  Future<void> insertCount(Count count) async {
-    await _db.insert(tableCount, count.toMap());
-  }
-
-  Future<void> deleteCount(int id) async {
-    await _db.delete(tableCount, where: '$columnId = ?', whereArgs: [id]);
-  }
-
   Future<List<Count>> getAllCount() async {
     final rawCountList = await _db.query(
       tableCount,
@@ -44,5 +36,13 @@ class CountRepository {
       return rawCountList.map((e) => Count.fromMap(e)).toList();
     }
     return [];
+  }
+
+  Future<void> insertCount(Count count) async {
+    await _db.insert(tableCount, count.toMap());
+  }
+
+  Future<void> deleteCount(int id) async {
+    await _db.delete(tableCount, where: '$columnId = ?', whereArgs: [id]);
   }
 }
