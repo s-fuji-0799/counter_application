@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:counter_application/infrastructures/sqlite.dart';
-
 import 'package:counter_application/notifiers/settings_notifier.dart';
-
 import 'package:counter_application/views/pages/main_page.dart';
 
 void main() {

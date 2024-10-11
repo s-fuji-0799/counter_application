@@ -40,7 +40,7 @@ class CountListTile extends ConsumerWidget {
     return ListTile(
       title: Text(count.value.toString()),
       subtitle: Text(count.countedAt.toString()),
-      onLongPress: () => countListNotifier.deleteCount(count.id!),
+      onLongPress: () => countListNotifier.deleteCount(count.id),
     );
   }
 }
