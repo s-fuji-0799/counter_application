@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:counter_application/notifiers/settings_notifier.dart';
-import 'package:counter_application/views/components/settings.dart';
+import 'package:counter_application/views/components/settings_components.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});

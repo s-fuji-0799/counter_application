@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:counter_application/views/components/counter.dart';
+import 'package:counter_application/views/components/counter_components.dart';
 import 'package:counter_application/views/pages/count_history_page.dart';
 import 'package:counter_application/views/pages/settings_page.dart';
 

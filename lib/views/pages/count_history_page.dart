@@ -1,4 +1,4 @@
-import 'package:counter_application/views/components/count_list.dart';
+import 'package:counter_application/views/components/count_components.dart';
 import 'package:flutter/material.dart';
 
 class CountHistoryPage extends StatelessWidget {
