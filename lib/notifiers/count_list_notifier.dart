@@ -12,28 +12,18 @@ class CountList extends AsyncNotifier<List<Count>> {
   CountRepository get _repository =>
       ref.watch(countRepositoryProvider).requireValue;
 
-  Future<List<Count>> _fetchCountList() async {
+  @override
+  FutureOr<List<Count>> build() async {
     return await _repository.getAllCount();
   }
 
-  @override
-  FutureOr<List<Count>> build() async {
-    return _fetchCountList();
-  }
-
   Future<void> addCount(int value) async {
-    state = await AsyncValue.guard(() async {
-      await _repository.insertCount(value);
-
-      return _fetchCountList();
-    });
+    await _repository.insertCount(value);
+    ref.invalidateSelf();
   }
 
   Future<void> deleteCount(int id) async {
-    state = await AsyncValue.guard(() async {
-      await _repository.deleteCount(id);
-
-      return _fetchCountList();
-    });
+    await _repository.deleteCount(id);
+    ref.invalidateSelf();
   }
 }

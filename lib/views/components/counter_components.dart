@@ -84,13 +84,15 @@ class CounterResetDialog extends ConsumerWidget {
             },
             child: const Text('いいえ')),
         TextButton(
-            onPressed: () {
+            onPressed: () async {
               Vibration.vibrate(duration: 10);
 
-              countListNotifier.addCount(count);
+              await countListNotifier.addCount(count);
               countNotifier.reset();
 
-              Navigator.of(context).pop();
+              if (context.mounted) {
+                Navigator.of(context).pop();
+              }
             },
             child: const Text('はい')),
       ],

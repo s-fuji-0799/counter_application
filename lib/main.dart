@@ -1,3 +1,4 @@
+import 'package:counter_application/repositories/count_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -68,6 +69,7 @@ class _EagerInitialization extends ConsumerWidget {
 final _eagerInitializationProvider = FutureProvider(
   (ref) async {
     await ref.read(dbProvider.future);
+    await ref.read(countRepositoryProvider.future);
     await ref.read(settingsProvider.future);
   },
 );
