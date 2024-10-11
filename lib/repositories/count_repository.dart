@@ -2,47 +2,60 @@ import 'package:counter_application/infrastructures/sqlite.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sqflite/sqflite.dart';
 
-import 'package:counter_application/constants/count_constants.dart';
 import 'package:counter_application/models/count_model.dart';
 
-final countRepositoryProvider = Provider<CountRepository>(
-  (ref) => CountRepository(ref.watch(dbProvider)),
-);
+final countRepositoryProvider = FutureProvider<CountRepository>(
+  (ref) async {
+    final db = await ref.watch(dbProvider.future);
 
-Future<void> createCountTable(Database db) async {
-  await db.execute(
-    '''
-    CREATE TABLE $tableCount (
-      $columnId INTEGER PRIMARY KEY AUTOINCREMENT,
-      $columnCountedAt INTEGER,
-      $columnValue INTEGER
-    )
-    ''',
-  );
-}
+    await db.execute(
+      '''
+      CREATE TABLE IF NOT EXISTS $tableCount (
+        $columnId INTEGER PRIMARY KEY AUTOINCREMENT,
+        $columnCountedAt INTEGER,
+        $columnValue INTEGER
+      )
+      ''',
+    );
+
+    return CountRepository(db);
+  },
+);
 
 class CountRepository {
   const CountRepository(this._db);
   final Database _db;
 
   Future<List<Count>> getAllCount() async {
-    final rawCountList = await _db.query(
+    final list = await _db.query(
       tableCount,
-      columns: [columnId, columnCountedAt, columnValue],
       orderBy: '$columnCountedAt DESC',
     );
 
-    if (rawCountList.isNotEmpty) {
-      return rawCountList.map((e) => Count.fromMap(e)).toList();
+    if (list.isEmpty) {
+      return [];
+    } else {
+      return list.map((e) => Count.fromMap(e)).toList();
     }
-    return [];
   }
 
-  Future<void> insertCount(Count count) async {
-    await _db.insert(tableCount, count.toMap());
+  Future<void> insertCount(int value) async {
+    final map = {
+      columnCountedAt: DateTime.now().millisecondsSinceEpoch,
+      columnValue: value,
+    };
+
+    await _db.insert(
+      tableCount,
+      map,
+    );
   }
 
   Future<void> deleteCount(int id) async {
-    await _db.delete(tableCount, where: '$columnId = ?', whereArgs: [id]);
+    await _db.delete(
+      tableCount,
+      where: '$columnId = ?',
+      whereArgs: [id],
+    );
   }
 }

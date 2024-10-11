@@ -42,7 +42,7 @@ class CounterPanel extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final count = ref.watch(countProvider);
-    final settings = ref.watch(settingsProvider);
+    final settings = ref.watch(settingsProvider).requireValue;
 
     return Card(
       child: Padding(

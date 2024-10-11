@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:counter_application/components/counter.dart';
-import 'package:counter_application/pages/count_history_page.dart';
-import 'package:counter_application/pages/settings_page.dart';
+import 'package:counter_application/views/components/counter.dart';
+import 'package:counter_application/views/pages/count_history_page.dart';
+import 'package:counter_application/views/pages/settings_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});

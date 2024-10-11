@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+const String changeColor = 'changeColor';
+const String colorChangeValue = 'colorChangeValue';
+const String themeColor = 'themeColor';
+
 class Settings {
   const Settings({
     required this.changeColor,

@@ -12,7 +12,7 @@ class SettingsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settingsNotifier = ref.watch(settingsProvider.notifier);
-    final settings = ref.watch(settingsProvider);
+    final settings = ref.watch(settingsProvider).requireValue;
 
     return Scaffold(
       appBar: AppBar(

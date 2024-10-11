@@ -5,22 +5,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:counter_application/infrastructures/shared_preferences.dart';
-import 'package:counter_application/constants/settings_constants.dart';
 
 final settingsRepositoryProvider = Provider<SettingsRepository>(
-  (ref) => SettingsRepository(ref.watch(settingsPrefsProvider)),
+  (ref) => SettingsRepository(ref.watch(prefsProvider)),
 );
 
 class SettingsRepository {
   const SettingsRepository(this._prefs);
-  final SharedPreferencesWithCache _prefs;
+  final SharedPreferencesAsync _prefs;
 
-  Settings getSettings() {
+  Future<Settings> getSettings() async {
     return Settings(
-      changeColor: _prefs.getBool(changeColor) ?? true,
-      colorChangeValue: _prefs.getInt(colorChangeValue) ?? 70,
+      changeColor: await _prefs.getBool(changeColor) ?? true,
+      colorChangeValue: await _prefs.getInt(colorChangeValue) ?? 70,
       themeColor: Color(
-        _prefs.getInt(themeColor) ?? Colors.purple.value,
+        await _prefs.getInt(themeColor) ?? Colors.purple.value,
       ),
     );
   }
